@@ -21,7 +21,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.google.common.base.Preconditions.checkArgument;
-import static org.springframework.util.StringUtils.isEmpty;
 
 @Configuration
 @ControllerAdvice
@@ -30,7 +29,7 @@ public class AppConfiguration {
     private static final Logger LOGGER = LoggerFactory.getLogger(AppConfiguration.class);
 
     @Autowired
-    public ApplicationContext applicationContext;
+    private ApplicationContext applicationContext;
 
     @Bean
     public DirectRouteRepository createDirectBusRouteRepository() throws IOException {
@@ -38,10 +37,11 @@ public class AppConfiguration {
         LOGGER.debug("Create DirectRouteRepository");
 
         String[] args = applicationContext.getEnvironment().getProperty("nonOptionArgs", String[].class);
-        checkArgument(args != null && args.length != 1 || !isEmpty(args[0]),
+
+        checkArgument(args != null && args.length == 1,
                 "Incorrect number of attributes, expected 1");
 
-        return BusRoutesDataFileParser.parse(args[0]);
+        return DataFileParser.parse(args[0]);
     }
 
 

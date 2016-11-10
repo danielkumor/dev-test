@@ -10,21 +10,26 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.nio.file.Files.exists;
+import static java.nio.file.Files.isRegularFile;
+import static org.springframework.util.StringUtils.isEmpty;
 
-public final class BusRoutesDataFileParser {
+public final class DataFileParser {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(BusRoutesDataFileParser.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DataFileParser.class);
 
-    private BusRoutesDataFileParser() {
+    private DataFileParser() {
     }
 
     public static DirectRouteRepository parse(String pathString) throws IOException {
 
         LOGGER.debug("Parse file from given location '{}'", pathString);
 
+        checkArgument(!isEmpty(pathString));
+
         Path path = Paths.get(pathString);
-        checkArgument(Files.exists(path), "Specified file '%s' does not exists.", path);
-        checkArgument(Files.isRegularFile(path), "Specified path '%s' is not a file.", path);
+        checkArgument(exists(path), "Specified file '%s' does not exists.", path);
+        checkArgument(isRegularFile(path), "Specified path '%s' is not a file.", path);
 
         DirectRouteRepository index = new DirectRouteRepository();
 

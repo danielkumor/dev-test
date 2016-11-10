@@ -10,7 +10,7 @@ import pl.danielkumor.DirectRouteRepository;
 import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 
-import static com.google.common.base.Preconditions.checkNotNull;
+import static com.google.common.base.Preconditions.checkArgument;
 import static java.util.Collections.EMPTY_SET;
 
 
@@ -24,9 +24,9 @@ public class DirectController {
 
     @RequestMapping("/direct")
     public DirectResponse isDirect(@NotNull(message = "Required Integer parameter 'dep_sid' is not present")
-                                   @RequestParam(name = "dep_sid", required = true) final Integer departureSID,
+                                   @RequestParam(name = "dep_sid") final Integer departureSID,
                                    @NotNull(message = "Required Integer parameter 'arr_sid' is not present")
-                                   @RequestParam(name = "arr_sid", required = true) final Integer arrivalSID) {
+                                   @RequestParam(name = "arr_sid") final Integer arrivalSID) {
 
         checkParameters(departureSID, arrivalSID);
 
@@ -36,7 +36,8 @@ public class DirectController {
     }
 
     private void checkParameters(final Integer departureSID, final Integer arrivalSID) {
-        checkNotNull(departureSID);
+        checkArgument(departureSID != null);
+
         if (departureSID.equals(arrivalSID)) {
             throw new ConstraintViolationException("'dep_sid' can not be the same as 'arr_sid'", EMPTY_SET);
         }

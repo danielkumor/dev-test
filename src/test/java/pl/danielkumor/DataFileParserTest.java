@@ -18,7 +18,7 @@ public class DataFileParserTest {
         DirectRouteRepository repo = DataFileParser.parse(path);
 
         //then
-        assertThat(repo.index.keySet().toArray()).contains(2, 3, 4, 8);
+        assertThat(repo.getIndex().keySet().toArray()).contains(2, 3, 4, 8);
     }
 
     @Test
